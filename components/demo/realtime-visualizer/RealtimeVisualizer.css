@@ -1,0 +1,77 @@
+.realtime-visualizer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  height: 250px;
+}
+
+.visualizer-pill {
+  background-color: white;
+  border-radius: 50px;
+  transition: all 0.1s ease-out;
+  transform-origin: center;
+}
+
+/* Default/Idle State */
+.visualizer-pill:nth-child(1),
+.visualizer-pill:nth-child(4) {
+  width: 35px;
+  height: 35px;
+}
+
+.visualizer-pill:nth-child(2),
+.visualizer-pill:nth-child(3) {
+  width: 55px;
+  height: 55px;
+}
+
+.realtime-visualizer.thinking .visualizer-pill {
+  animation: thinking-pulse 1.5s infinite ease-in-out;
+}
+
+.realtime-visualizer.thinking .visualizer-pill:nth-child(1) { animation-delay: 0.3s; }
+.realtime-visualizer.thinking .visualizer-pill:nth-child(2) { animation-delay: 0.15s; }
+.realtime-visualizer.thinking .visualizer-pill:nth-child(3) { animation-delay: 0s; }
+.realtime-visualizer.thinking .visualizer-pill:nth-child(4) { animation-delay: 0.2s; }
+
+
+@keyframes thinking-pulse {
+  0%, 100% {
+    transform: scaleY(1);
+  }
+  50% {
+    transform: scaleY(1.3);
+  }
+}
+
+/* Emotion States */
+.realtime-visualizer.happy .visualizer-pill {
+  background-color: #FFD700; /* Gold */
+  animation: happy-bounce 2s infinite ease-in-out;
+}
+.realtime-visualizer.happy .visualizer-pill:nth-child(1) { animation-delay: 0.4s; }
+.realtime-visualizer.happy .visualizer-pill:nth-child(2) { animation-delay: 0.2s; }
+.realtime-visualizer.happy .visualizer-pill:nth-child(3) { animation-delay: 0s; }
+.realtime-visualizer.happy .visualizer-pill:nth-child(4) { animation-delay: 0.3s; }
+
+@keyframes happy-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
+}
+
+.realtime-visualizer.sad .visualizer-pill {
+  background-color: #6495ED; /* Cornflower Blue */
+  animation: sad-wave 2.5s infinite ease-in-out;
+  transform-origin: bottom;
+}
+.realtime-visualizer.sad .visualizer-pill:nth-child(1) { animation-delay: 0.4s; }
+.realtime-visualizer.sad .visualizer-pill:nth-child(2) { animation-delay: 0.2s; }
+.realtime-visualizer.sad .visualizer-pill:nth-child(3) { animation-delay: 0s; }
+.realtime-visualizer.sad .visualizer-pill:nth-child(4) { animation-delay: 0.3s; }
+
+
+@keyframes sad-wave {
+  0%, 100% { transform: scaleY(1); }
+  50% { transform: scaleY(0.8); }
+}

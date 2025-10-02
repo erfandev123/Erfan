@@ -1,0 +1,456 @@
+@import './components/demo/realtime-visualizer/RealtimeVisualizer.css';
+@import './components/demo/smart-home/SmartLight.css';
+@import './components/demo/jarvis/WeatherDisplay.css';
+@import './components/demo/jarvis/MusicPlayer.css';
+@import './components/demo/jarvis/TimerDisplay.css';
+@import './components/demo/live-transcription/LiveTranscription.css';
+@import './components/camera/CameraView.css';
+@import './components/history/HistoryModal.css';
+
+:root {
+  --background: #121212;
+  --surface-light: rgba(255, 255, 255, 0.1);
+  --surface-light-hover: rgba(255, 255, 255, 0.2);
+  --text-primary: #ffffff;
+  --text-secondary: #a7a7a7;
+  --border-stroke: #333333;
+
+  --accent-blue: #89cff0;
+  --accent-blue-active: #89cff0;
+
+  --font-family: 'Google Sans', 'Roboto', sans-serif;
+  scrollbar-color: var(--text-secondary) var(--background);
+  scrollbar-width: thin;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body,
+html,
+#root,
+.App {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+body {
+  font-family: var(--font-family);
+  background: var(--background);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon,
+.material-symbols-outlined {
+  font-family: 'Material Symbols Outlined';
+  font-weight: 300;
+  line-height: 1;
+  user-select: none;
+}
+
+.App {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  position: relative;
+}
+
+.app-header {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  display: flex;
+  gap: 12px;
+  z-index: 100;
+}
+
+.streaming-console {
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  position: relative;
+}
+
+.streaming-console main {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-grow: 1;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.transcription-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  flex-direction: column;
+}
+
+.control-tray {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 24px 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+}
+
+.control-tray-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+}
+
+button.icon-button {
+  background-color: var(--surface-light);
+  color: var(--text-primary);
+  border-radius: 50%;
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    opacity 0.2s ease;
+  padding: 0;
+}
+
+button.icon-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background-color: var(--surface-light);
+}
+
+button.header-button {
+  background-color: var(--surface-light);
+  color: var(--text-primary);
+  border-radius: 28px;
+  height: 48px;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+button.icon-button:not(:disabled):hover,
+button.header-button:hover {
+  background-color: var(--surface-light-hover);
+}
+
+button.icon-button .material-symbols-outlined {
+  font-size: 24px;
+}
+
+.camera-button {
+  width: 64px;
+  height: 64px;
+}
+.camera-button .material-symbols-outlined {
+  font-size: 32px;
+}
+
+/* New Mic Button Styles */
+.mic-button-container {
+  --user-volume-scale: 1;
+  position: relative;
+  width: 80px;
+  height: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.mic-button {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background-color: var(--surface-light);
+  transition: all 0.2s ease-in-out;
+  border: 2px solid transparent;
+  z-index: 2;
+  position: relative;
+}
+
+.mic-button .material-symbols-outlined {
+  font-size: 36px;
+}
+
+.mic-button::before {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  right: -4px;
+  bottom: -4px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  transition: all 0.3s ease-in-out;
+}
+
+.mic-glow {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background-color: var(--accent-blue);
+  opacity: 0;
+  transition:
+    transform 0.2s ease-out,
+    opacity 0.3s ease-out;
+  transform: scale(0.8);
+  z-index: 1;
+}
+
+/* Connected State */
+.mic-button-container.connected:not(.muted) .mic-button {
+  background-color: var(--accent-blue);
+  color: var(--background);
+}
+
+/* Idle (Connected) State Animation */
+.mic-button-container.connected.idle:not(.muted) .mic-glow {
+  animation: pulse 2s infinite;
+}
+
+/* Listening State */
+.mic-button-container.listening:not(.muted) .mic-glow {
+  transform: scale(var(--user-volume-scale));
+  opacity: 0.5;
+  transition:
+    transform 0.1s ease-out,
+    opacity 0.1s ease-out;
+}
+
+/* Speaking State */
+.mic-button-container.speaking:not(.muted) .mic-glow {
+  opacity: 0.6;
+  transform: scale(1.1);
+  animation: pulse 1.5s infinite;
+}
+
+/* Thinking State */
+.mic-button-container.thinking:not(.muted) .mic-button::before {
+  border-top-color: var(--accent-blue);
+  border-right-color: var(--accent-blue);
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(0.95);
+    opacity: 0.3;
+  }
+  70% {
+    transform: scale(1.2);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+}
+.error-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100dvh;
+  width: 100%;
+  background: black;
+  color: white;
+  gap: 48px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 99991;
+}
+
+.error-screen .error-message-container,
+.error-screen .error-raw-message-container {
+  width: 100%;
+  text-align: center;
+  max-width: 650px;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+.error-screen .close-button {
+  color: white;
+  font-size: 24px;
+}
+
+/* Sidebar styles */
+.sidebar {
+  position: fixed;
+  top: 0;
+  right: -350px;
+  width: 350px;
+  height: 100%;
+  background-color: var(--background);
+  border-left: 1px solid var(--border-stroke);
+  transition: right 0.3s ease-in-out;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar.open {
+  right: 0;
+}
+
+.sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border-stroke);
+}
+.sidebar-header h3 {
+  font-size: 1.2rem;
+}
+
+.sidebar-content {
+  padding: 20px;
+  overflow-y: auto;
+  flex-grow: 1;
+}
+
+.sidebar-section {
+  margin-bottom: 24px;
+}
+
+.sidebar-section-title {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.sidebar label {
+  display: block;
+  margin-bottom: 16px;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.sidebar textarea,
+.sidebar select,
+.sidebar input[type='text'] {
+  width: 100%;
+  background-color: var(--surface-light);
+  border: 1px solid var(--border-stroke);
+  border-radius: 8px;
+  padding: 10px;
+  color: var(--text-primary);
+  font-size: 1rem;
+  margin-top: 6px;
+}
+
+.sidebar textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.sidebar .sidebar-setting-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.sidebar .sidebar-setting-row label {
+  margin-bottom: 0;
+}
+
+/* Toggle Switch styles */
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 51px;
+  height: 31px;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-switch .slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--surface-light);
+  transition: 0.4s;
+  border-radius: 34px;
+  border: 1px solid var(--border-stroke);
+}
+
+.toggle-switch .slider:before {
+  position: absolute;
+  content: '';
+  height: 21px;
+  width: 21px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+
+.toggle-switch input:checked + .slider {
+  background-color: var(--accent-blue);
+}
+
+.toggle-switch input:checked + .slider:before {
+  transform: translateX(20px);
+}
+
+/* Range slider styles */
+.sidebar input[type='range'] {
+  width: 100%;
+  margin-top: 8px;
+}

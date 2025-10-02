@@ -1,0 +1,39 @@
+.live-transcription-overlay {
+  position: absolute;
+  bottom: 140px; /* Above control tray */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 700px;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(5px);
+  border-radius: 12px;
+  padding: 12px 20px;
+  text-align: center;
+  z-index: 50;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.live-transcription-overlay.visible {
+  opacity: 1;
+}
+
+.transcription-text {
+  margin: 4px 0;
+  font-size: 18px;
+  line-height: 1.4;
+  color: var(--text-secondary);
+  min-height: 25px; /* Reserve space to prevent layout shift */
+  transition: color 0.3s ease;
+  font-weight: 500;
+}
+
+.transcription-text.user-text {
+  color: var(--text-primary);
+}
+
+.transcription-text.agent-text {
+  color: var(--accent-blue);
+}

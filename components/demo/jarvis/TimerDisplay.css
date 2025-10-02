@@ -1,0 +1,61 @@
+.timer-display {
+  position: absolute;
+  bottom: 15%;
+  right: 5%;
+  background-color: rgba(20, 20, 20, 0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--border-stroke);
+  border-radius: 12px;
+  padding: 12px 20px;
+  color: var(--text-primary);
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  opacity: 1;
+  transform: translateY(0);
+  transition: all 0.5s ease-in-out;
+  box-shadow: 0 0 20px rgba(137, 207, 240, 0.2);
+}
+
+.timer-icon {
+  font-size: 28px;
+  color: var(--accent-blue);
+  text-shadow: 0 0 5px var(--accent-blue);
+}
+
+.timer-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.timer-name {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.timer-time {
+  font-size: 18px;
+  font-family: 'Space Mono', monospace;
+}
+
+.timer-display.finished .timer-time {
+  color: #ff6464;
+  text-shadow: 0 0 8px #ff6464;
+}
+
+.timer-display.finished {
+  animation: timer-flash 1s infinite;
+}
+
+@keyframes timer-flash {
+  0%,
+  100% {
+    border-color: #ff6464;
+    box-shadow: 0 0 20px rgba(255, 100, 100, 0.5);
+  }
+  50% {
+    border-color: var(--border-stroke);
+    box-shadow: 0 0 30px 10px rgba(255, 100, 100, 0.8);
+  }
+}

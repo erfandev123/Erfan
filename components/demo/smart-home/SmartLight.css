@@ -1,0 +1,41 @@
+.smart-light-container {
+  position: absolute;
+  top: 15%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  opacity: 0.3;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.smart-light-container.on {
+  opacity: 1;
+}
+
+.light-icon-wrapper {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.light-icon-wrapper .material-symbols-outlined {
+  font-size: 100px;
+  color: var(--surface-light);
+  transition: color 0.3s ease-in-out;
+}
+
+.smart-light-container.on .light-icon-wrapper .material-symbols-outlined {
+  color: white;
+}
+
+.light-glow {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  filter: blur(25px);
+  transition:
+    background-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
